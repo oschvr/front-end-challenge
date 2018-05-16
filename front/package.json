@@ -5,15 +5,26 @@
   "dependencies": {
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-scripts": "1.1.4"
+    "react-grid-system": "^3.2.3",
+    "react-scripts": "1.1.4",
+    "socket.io-client": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=4200 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile-less": "grunt compile-less",
+    "watch-less": "grunt watch"
   },
   "devDependencies": {
+    "bootstrap": "^4.1.1",
+    "bootstrap-less-port": "^0.3.0",
+    "grunt": "^1.0.2",
+    "grunt-contrib-less": "^1.4.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
     "nodemon": "^1.17.4"
   }
 }
