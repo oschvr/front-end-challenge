@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-grid-system';
+import { Row, Col } from 'react-grid-system';
 
 import Trades from './Trades';
 import Chart from './Chart';
 import Orders from './Orders';
 import { Market } from './Market';
 import { Topbar } from './Topbar';
+import { Navbar } from './Navbar';
 
 export class Layout extends Component {
   render() {
@@ -13,24 +14,29 @@ export class Layout extends Component {
       <div>
         <Row>
             <Col sm={12}>
+                <Navbar/>
+            </Col>
+        </Row>
+        <Row>
+            <Col sm={12}>
                 <Topbar/>
             </Col>
         </Row>
         <Row nogutter>
-            <Col md={3} lg={3}>
+            <Col xs={3}>
                 <Trades/>
             </Col>
-            <Col md={6}>
+            <Col xs={6}>
                 <Row>
-                    <Col lg={12}>
+                    <Col sm={12}>
                         <Chart/>
                     </Col>
-                    <Col lg={12}>
+                    <Col sm={12}>
                         <Orders/>
                     </Col>
                 </Row>
             </Col>
-            <Col lg={3} md={3}>
+            <Col xs={3}>
                 <Market/>
             </Col>
         </Row>
