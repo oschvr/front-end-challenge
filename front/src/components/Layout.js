@@ -22,7 +22,7 @@ export class Layout extends Component {
                 <Topbar/>
             </Col>
         </Row>
-        <Row nogutter>
+        <Row nogutter className="h-100">
             <Col xs={3}>
                 <Trades/>
             </Col>

@@ -49,18 +49,20 @@ export class Orders extends Component {
   render(){
     return (
       <div>
-          <div className="card">
+          <div className="card bg-dark text-light rounded-0 border-0">
               <div className="card-body text-center px-1">
                 <h4>Orders</h4>
                 <div className="px-1">
                   <Row>
                     <Col xs={6}>
-                      <div className="card bg-secondary">
-                        <div className="card-block text-light">Posturas de Compra</div>
+                    <div className="card bg-secondary text-light rounded-0">
+                      <div className="card-block pt-2 pb-0">
+                        <h6 className="text-uppercase">Compras</h6>
                       </div>
+                    </div>
                       <table className="table table-borderless table-sm">
                         <thead>
-                          <tr>
+                          <tr className="text-uppercase small">
                             <th scope="col">Amount</th>
                             <th scope="col">Value</th>
                             <th scope="col">Price</th>
@@ -72,12 +74,14 @@ export class Orders extends Component {
                       </table>
                     </Col>
                     <Col xs={6}>
-                    <div className="card bg-secondary">
-                      <div className="card-block text-light">Posturas de Venta</div>
+                    <div className="card bg-secondary text-light rounded-0">
+                      <div className="card-block pt-2 pb-0">
+                        <h6 className="text-uppercase">Ventas</h6>
+                      </div>
                     </div>
                     <table className="table table-borderless table-sm">
                       <thead>
-                        <tr>
+                        <tr className="text-uppercase small">
                           <th scope="col">Amount</th>
                           <th scope="col">Value</th>
                           <th scope="col">Price</th>
