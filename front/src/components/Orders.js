@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Row, Col } from 'react-grid-system';
 
 import io from 'socket.io-client';
 import moment from 'moment';
@@ -10,21 +11,20 @@ export class Orders extends Component {
     super(props)
 
     this.state = {
-      data: []
+      data: this.props.data
     }
   }
 
   getInitialState(){
     return { 
-      data: [] 
+      data: this.props.data
     }
   };
 
   componentWillMount(){
     fetch('https://api.bitso.com/v3/order_book/?book=btc_mxn&limit=20')
       .then(response => response.json())
-      .then(data => this.setState({ data: data.payload }))
-    console.log(this.state.data); 
+      .then(data => this.setState({ data: data.payload })) 
   }
 
   componentDidMount(){
@@ -34,12 +34,12 @@ export class Orders extends Component {
     }
     this.socket.onmessage = (msg) => {
       const order = JSON.parse(msg.data);
+      console.log('incoming order: ', order.payload);
       if(order.type == 'orders' && order.payload){
-        const data = this.state.data;
-        //console.log(data);
-        //data.push(order.payload);
+        const orders = this.state.data;
+        //console.log(orders);
         this.setState({
-          data: order.payload
+          data: orders
         })
       }
     }
@@ -51,11 +51,10 @@ export class Orders extends Component {
       <div>
           <div className="card">
               <div className="card-body">
-                  <h3>Orders</h3>                
-                  <ul className="list-unstyled">
-                    <div className="px-1">
-                    </div>
-                  </ul>
+                <h3>Orders</h3>
+                <Row>
+
+                </Row>
               </div> 
           </div>
       </div>
@@ -63,6 +62,5 @@ export class Orders extends Component {
   }
 }
 
-Orders.defaultProps = { data: [] };
 
 export default Orders;
