@@ -16,9 +16,10 @@ export class Orders extends Component {
   };
 
   componentWillMount(){
+    //fetch 20 trades to display at first. map the obj values to the socket standard
     fetch('https://api.bitso.com/v3/order_book/?book=btc_mxn&limit=20')
       .then(response => response.json())
-      .then(data => this.setState({ data: data.payload })) 
+      .then(data => console.log(data)) 
   }
 
   componentDidMount(){

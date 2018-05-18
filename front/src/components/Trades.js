@@ -19,12 +19,10 @@ export class Trades extends Component {
 
   componentWillMount(){
     //fetch 20 trades to display at first. map the obj values to the socket standard
-    fetch('https://api.bitso.com/v3/trades/?book=btc_mxn')
+    fetch('https://api.bitso.com/v3/trades/?book=btc_mxn&limit=20')
       .then(response => response.json())
       .then(data => this.setState({
-        data: data.payload.sort((x, y)=>{
-          return x.created_at - y.created_at;
-        }).map((x)=>{
+        data: data.payload.sort().map((x)=>{
           const {amount: a, created_at: c, maker_side: t, price: r, tid: i} = x;
           return Object.assign({}, {a, c, t, r, i});
         })

@@ -1,6 +1,21 @@
 import React, { Component } from 'react'
 
 export class Navbar extends Component {
+
+    componentWillMount(){
+        //fetch price by book trades to display at first. map the obj values to the socket standard
+        fetch('https://api.bitso.com/v3/trades/?book=btc_mxn')
+            .then(response => response.json())
+            .then(data => this.setState({
+            data: data.payload.sort((x, y)=>{
+                return x.created_at - y.created_at;
+            }).map((x)=>{
+                const {amount: a, created_at: c, maker_side: t, price: r, tid: i} = x;
+                return Object.assign({}, {a, c, t, r, i});
+            })
+            }))
+    }
+
   render() {
     return (
         <div>
