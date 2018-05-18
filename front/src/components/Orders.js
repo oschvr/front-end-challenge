@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'react-grid-system';
-
-import io from 'socket.io-client';
-import moment from 'moment';
-
-var websocket = new WebSocket('wss://ws.bitso.com');
 
 export class Orders extends Component {
   constructor(props){
@@ -34,8 +28,8 @@ export class Orders extends Component {
     }
     this.socket.onmessage = (msg) => {
       const order = JSON.parse(msg.data);
-      console.log('incoming order: ', order.payload);
-      if(order.type == 'orders' && order.payload){
+      //console.log('incoming order: ', order.payload);
+      if(order.type === 'orders' && order.payload){
         const orders = this.state.data;
         //console.log(orders);
         this.setState({
@@ -46,15 +40,11 @@ export class Orders extends Component {
   }
 
   render(){
-    const data = this.state.data;
     return (
       <div>
           <div className="card">
               <div className="card-body">
                 <h3>Orders</h3>
-                <Row>
-
-                </Row>
               </div> 
           </div>
       </div>
