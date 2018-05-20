@@ -22,7 +22,7 @@ export class Trades extends Component {
       .then(response => response.json())
       .then(data => this.setState({
         data: data.payload.map((trade)=>{
-          console.log(trade.created_at);
+          //console.log(trade.created_at);
           const {amount: a, created_at: d, maker_side: t, price: r, tid: i} = trade;
           return Object.assign({}, {a, d, t, r, i});
         })
@@ -40,7 +40,7 @@ export class Trades extends Component {
     this.socket.onmessage = (msg) => {
       //Parse the socket message. validate if type === 'trades'
       const trade = JSON.parse(msg.data);
-      console.log('Incoming Trade:', trade);
+      //console.log('Incoming Trade:', trade);
       if(trade.type === 'trades' && trade.payload){
         //Add new data to trades socket info
         trade.payload[0].c = new Date();
@@ -49,7 +49,7 @@ export class Trades extends Component {
         //unshift => push to the top
         data.unshift(trade.payload[0]);
         //slice to the top N elements
-        //data.slice(0, 30);
+        data.slice(0, 30);
         //create animation
         //Push to setState. This calls render() automatically
         this.setState({
