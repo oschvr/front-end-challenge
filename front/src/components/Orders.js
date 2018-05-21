@@ -1,25 +1,40 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-grid-system';
 
+//API
+import axios from 'axios';
+import moment from 'moment';
+
 export class Orders extends Component {
   constructor(props){
     super(props)
 
     this.state = {
-      data: this.props.data
+      sequence: this.props.sequence,
+      updated_at: this.props.updated_at,
+      asks: this.props.asks,
+      bids: this.props.bids
     }
   }
 
-  getInitialState(){
-    return { 
-      data: this.props.data
-    }
-  };
 
   componentWillMount(){
     //fetch 20 trades to display at first. map the obj values to the socket standard
-    fetch('https://api.bitso.com/v3/order_book/?book=btc_mxn&aggregate=false&limit=20')
-      .then(response => response.json())
+    axios.get('https://api.bitso.com/v3/order_book/?book=btc_mxn&aggregate=false&limit=30')
+      .then( (res) => { 
+        this.setState({ 
+          asks: res.data.payload.asks.map((ask) => {
+            const {amount: a, price: r, value: v, oid: o} = ask;
+            return Object.assign({}, {a, r, v, o});
+          }),
+          bids: res.data.payload.bids.map((bid) => {
+            const {amount: a, price: r, value: v, oid: o} = bid;
+            return Object.assign({}, {a, r, v, o});
+          })
+        });
+      }, (err) => {
+        console.log('Orders Error: ', err);
+      })
 
   }
 
@@ -35,7 +50,7 @@ export class Orders extends Component {
     //listen for orders channel new msg
     this.socket.onmessage = (msg) => {
       const order = JSON.parse(msg.data);
-      //console.log('incoming order: ', order.payload);
+      //console.log('Incoming Order: ', order.payload);
       if(order.type === 'orders' && order.payload){
         //const orders = this.state.data;
         //console.log('Current Data: ', orders);

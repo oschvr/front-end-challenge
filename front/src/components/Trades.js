@@ -1,30 +1,38 @@
 import React, { Component } from 'react';
+
+//API
+import axios from 'axios';
+
+//Utils
 import moment from 'moment';
+import NumberFormat from 'react-number-format';
+
 
 export class Trades extends Component {
   constructor(props){
     super(props)
 
     this.state = {
-      data: this.props.data
+      trades: this.props.data
     }
   }
 
   getInitialState(){
     return {
-      data: this.props.data
+      trades: this.props.data
     }
   }
 
   componentWillMount(){
     //fetch 20 trades to display at first. map the obj values to the socket standard
-    fetch('https://api.bitso.com/v3/trades/?book=btc_mxn&limit=30')
-      .then(response => response.json())
-      .then(data => this.setState({
-        data: data.payload.map((trade)=>{
+    axios.get('https://api.bitso.com/v3/trades/?book=btc_mxn&limit=30')
+      .then((res) => this.setState({
+        trades: res.data.payload.map((trade) => {
           //console.log(trade.created_at);
           const {amount: a, created_at: d, maker_side: t, price: r, tid: i} = trade;
           return Object.assign({}, {a, d, t, r, i});
+        }, (err) => {
+          console.log('Trades Error: ', err)
         })
       }))
   }
@@ -45,15 +53,15 @@ export class Trades extends Component {
         //Add new data to trades socket info
         trade.payload[0].c = new Date();
         //Create a copy of state.data, limit 20
-        const data = this.state.data;
+        const trades = this.state.trades;
         //unshift => push to the top
-        data.unshift(trade.payload[0]);
+        trades.unshift(trade.payload[0]);
         //slice to the top N elements
-        data.slice(0, 30);
+        trades.slice(0, 30);
         //create animation
         //Push to setState. This calls render() automatically
         this.setState({
-          data: data
+          trades: trades
         })
       }
     }
@@ -61,7 +69,7 @@ export class Trades extends Component {
 
   render(){
     //get current state.data
-    const data = this.state.data;
+    const trades = this.state.trades;
     //console.log('Trades: ',data);
     return (
       <div>
@@ -83,18 +91,25 @@ export class Trades extends Component {
                       </thead>
                       <tbody>
                       { 
-                        data.map((i) => i.t === 0 || i.t === 'buy'
+                        trades.map((i) => i.t === 0 || i.t === 'buy'
                         ? 
                           <tr className="small" key={i.i}>
                             <td>{moment(i.d).format('HH:mm:ss')}</td>
-                            <td className="text-success">{i.r}</td>
-                            <td>{parseFloat(i.a).toFixed(8)}</td>
+                            <td className="text-success">
+                              <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'}/>
+                            </td>
+                            <td>
+                              <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
+                            </td>
                           </tr> 
                         : 
                           <tr className="small" key={i.i}> 
                             <td>{moment(i.d).format('HH:mm:ss')}</td>
-                            <td className="text-danger">{i.r}</td>
-                            <td>{parseFloat(i.a).toFixed(8)}</td>
+                            <td className="text-danger">
+                              <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'}/></td>
+                            <td>
+                              <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
+                            </td>
                           </tr>
                         )
                       }

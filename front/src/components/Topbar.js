@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+//API
+import axios from 'axios';
+//import moment from 'moment';
+
 export class Topbar extends Component {
   constructor(props){
     super(props)
@@ -11,23 +15,12 @@ export class Topbar extends Component {
 
   componentWillMount(){
     //fetch ticker data first
-    fetch('https://api.bitso.com/v3/ticker/?book=btc_mxn', {
-      method: 'GET',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      })
-    })
-      .then(response => response.json())
-      .then(data => this.setState({ data: data.payload }))
-      .catch(err => console.log('Topbar Error: ', err));
-    
-    //fetch ticker data every 15 sec.
-    setTimeout(()=>{
-      fetch('https://api.bitso.com/v3/ticker/?book=btc_mxn')
-        .then(response => response.json())
-        .then(data => this.setState({ data: data.payload }))
-    }, 15000)
+    axios.get('https://api.bitso.com/v3/ticker/?book=btc_mxn')
+      .then((res) => this.setState({
+        ticker: res.data.payload
+      }, (err) => {
+        console.log('Topbar Error: ', err)
+      }))
   }
 
   /*
@@ -52,25 +45,33 @@ export class Topbar extends Component {
     console.log('Ticker: ', data);
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-2">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-secondary py-0">
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item dropdown px-3">
-                  <a className="nav-link dropdown-toggle">
+                  <a className="nav-link dropdown-toggle" id="marketDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span className="text-success">BTC / MXN</span>
                   </a>
+                  <div className="dropdown-menu rounded-0" aria-labelledby="marketDropdown">
+                    <a className="dropdown-item" >BTC/MXN</a>
+                    <div className="dropdown-divider"></div>
+                    <a className="dropdown-item" >ETH/MXN</a>
+                    <a className="dropdown-item" >XRP/MXN</a>
+                </div>
               </li>
-              <li className="nav-item">
-                <a className="nav-link"><span className="text-muted">Volumen 24 hrs. </span></a>
+            </ul>
+            <ul className="navbar-nav">
+              <li className="nav-item px-3">
+                <a className="nav-link"><span className="text-light">Volumen 24 hrs. </span></a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link disabled">Max</a>
+              <li className="nav-item px-3">
+                <a className="nav-link disabled"><span className="text-light">Max</span></a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link disabled">Min</a>
+              <li className="nav-item px-3">
+                <a className="nav-link disabled"><span className="text-light">Min</span></a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link disabled">Variación</a>
+              <li className="nav-item px-3">
+                <a className="nav-link disabled"><span className="text-light">Variación</span></a>
               </li>
             </ul>
           </div>

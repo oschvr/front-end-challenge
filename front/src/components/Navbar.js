@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 
 export class Navbar extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      data: this.props.data
+    }
+  }
 
   componentWillMount(){
   }
@@ -8,7 +15,7 @@ export class Navbar extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3" style={{overflow: "visible"}}>
         <a className="navbar-brand text-light">BITSO</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
@@ -21,9 +28,9 @@ export class Navbar extends Component {
               </li>
             </ul>
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item dropdown px-3">
-                  <a className="nav-link dropdown-toggle">
-                    1 BTC = 000,000 MXN
+              <li className="nav-item px-3">
+                  <a className="nav-link">
+                    <span className="text-muted">1 BTC </span> = 000,000 MXN
                   </a>
               </li>
               <li className="nav-item dropdown px-3">
