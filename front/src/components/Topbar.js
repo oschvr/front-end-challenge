@@ -9,18 +9,21 @@ export class Topbar extends Component {
     super(props)
 
     this.state = {
-      data: this.props.data
+      ticker: this.props.ticker
     }
   }
 
   componentWillMount(){
     //fetch ticker data first
-    axios.get('https://api.bitso.com/v3/ticker/?book=btc_mxn')
-      .then((res) => this.setState({
-        ticker: res.data.payload
-      }, (err) => {
-        console.log('Topbar Error: ', err)
-      }))
+    // axios.get('https://api.bitso.com/v3/ticker/?book=btc_mxn')
+    //   .then((res) => this.setState({
+    //     ticker: res.data.payload
+    //   }, (err) => {
+    //     console.log('Topbar Error: ', err)
+    //   }))
+    //   .catch((err) => {
+    //     console.error(err);      
+    //   })
   }
 
   /*
@@ -41,8 +44,8 @@ export class Topbar extends Component {
   */
 
   render() {
-    const data = this.state.data;
-    console.log('Ticker: ', data);
+    const ticker = this.state.ticker;
+    //console.log('Ticker: ', ticker);
     return (
       <div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-secondary py-0">

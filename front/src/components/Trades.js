@@ -13,13 +13,19 @@ export class Trades extends Component {
     super(props)
 
     this.state = {
-      trades: this.props.data
+      data: { 
+        trades: this.props.trades, 
+        loading: true
+      }
     }
   }
 
   getInitialState(){
     return {
-      trades: this.props.data
+      data: { 
+        trades: this.props.trades, 
+        loading: true
+      }
     }
   }
 
@@ -27,13 +33,15 @@ export class Trades extends Component {
     //fetch 20 trades to display at first. map the obj values to the socket standard
     axios.get('https://api.bitso.com/v3/trades/?book=btc_mxn&limit=30')
       .then((res) => this.setState({
-        trades: res.data.payload.map((trade) => {
-          //console.log(trade.created_at);
-          const {amount: a, created_at: d, maker_side: t, price: r, tid: i} = trade;
-          return Object.assign({}, {a, d, t, r, i});
-        }, (err) => {
-          console.log('Trades Error: ', err)
-        })
+        data: {
+          trades: res.data.payload.map((trade) => {
+            const {amount: a, created_at: d, maker_side: t, price: r, tid: i} = trade;
+            return Object.assign({}, {a, d, t, r, i});
+          }, (err) => {
+            console.log('Trades Error: ', err)
+          }),
+          loading: false
+        }
       }))
   }
 
@@ -53,7 +61,7 @@ export class Trades extends Component {
         //Add new data to trades socket info
         trade.payload[0].c = new Date();
         //Create a copy of state.data, limit 20
-        const trades = this.state.trades;
+        const trades = this.state.data.trades;
         //unshift => push to the top
         trades.unshift(trade.payload[0]);
         //slice to the top N elements
@@ -61,16 +69,18 @@ export class Trades extends Component {
         //create animation
         //Push to setState. This calls render() automatically
         this.setState({
-          trades: trades
+          data: {
+            trades: trades,
+            loading: false
+          }
         })
       }
     }
   }
 
   render(){
-    //get current state.data
-    const trades = this.state.trades;
-    //console.log('Trades: ',data);
+    const data = this.state.data;
+
     return (
       <div>
         <div className="card bg-dark text-light rounded-0 border-0 h-100">
@@ -91,26 +101,30 @@ export class Trades extends Component {
                       </thead>
                       <tbody>
                       { 
-                        trades.map((i) => i.t === 0 || i.t === 'buy'
+                        data.loading 
                         ? 
-                          <tr className="small" key={i.i}>
-                            <td>{moment(i.d).format('HH:mm:ss')}</td>
-                            <td className="text-success">
-                              <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'}/>
-                            </td>
-                            <td>
-                              <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
-                            </td>
-                          </tr> 
+                        <tr><td colSpan={3}>Loading</td></tr> 
                         : 
-                          <tr className="small" key={i.i}> 
-                            <td>{moment(i.d).format('HH:mm:ss')}</td>
-                            <td className="text-danger">
-                              <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'}/></td>
-                            <td>
-                              <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
-                            </td>
-                          </tr>
+                          data.trades.map((i) => i.t === 0 || i.t === 'buy'
+                          ? 
+                            <tr className="small" key={i.i}>
+                              <td>{moment(i.d).format('HH:mm:ss')}</td>
+                              <td className="text-success">
+                                <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
+                              </td>
+                              <td>
+                                <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
+                              </td>
+                            </tr> 
+                          : 
+                            <tr className="small" key={i.i}> 
+                              <td>{moment(i.d).format('HH:mm:ss')}</td>
+                              <td className="text-danger">
+                                <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/></td>
+                              <td>
+                                <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
+                              </td>
+                            </tr>
                         )
                       }
                       </tbody>
@@ -123,6 +137,11 @@ export class Trades extends Component {
   }
 }
 
-Trades.defaultProps = { data: [] };
+Trades.defaultProps = { 
+  data: { 
+    trades: [], 
+    loading: true
+  }
+};
 
 export default Trades;
