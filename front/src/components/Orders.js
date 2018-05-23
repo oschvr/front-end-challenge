@@ -15,11 +15,6 @@ export class Orders extends Component {
     
   }
   
-  calculateSum = (orders) =>{
-    return orders.reduce((i)=>{
-      return i.a
-    })
-  }
 
   render(){
     const orders = this.orders;
@@ -65,7 +60,7 @@ export class Orders extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                
+
                 </tbody>
               </table>
               </Col>
