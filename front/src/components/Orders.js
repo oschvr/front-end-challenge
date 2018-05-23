@@ -84,10 +84,9 @@ export class Orders extends Component {
     }
   }
 
-
   render(){
     const data = this.state.data;
-    console.log(data);
+    //console.log(data);
     return (
       <div className="card bg-dark text-light rounded-0 border-0">
         <div className="card-body text-center px-1">
@@ -111,16 +110,19 @@ export class Orders extends Component {
                   </thead>
                   <tbody>
                     {
-                      data.loading ? 
-                      <tr><td colSpan={4}>Loading</td></tr> : 
-                      data.asks.slice(0,20).map((i) => {
+                      data.loading 
+                      ? 
+                      <tr><td colSpan={4}>Loading</td></tr> 
+                      : 
+                      data.asks.map((i) => {
+                        //console.log(i);
                         <tr className="small">
-                          <td>{i.a}}</td>  
+                          <td>{i.a}</td>  
                           <td>
                             <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
                           </td>
                           <td>
-                            <NumberFormat value={parseFloat(i.r) * parseFloat(i.a)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
+                            <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
                           </td> 
                           <td className="text-success">
                             <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
