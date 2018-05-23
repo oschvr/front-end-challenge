@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-//API
-import axios from 'axios';
-
 //Utils
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
@@ -14,14 +11,8 @@ export class Trades extends Component {
     this.trades = this.props.trades
   }
 
-  getInitialState(){
-    return {
-      trades: this.props.trades
-    }
-  }
-
   render() {
-    const trades = this.props.trades;
+    const trades = this.trades;
     return (
       <div>
         <div className="card bg-dark text-light rounded-0 border-0 h-100">
@@ -44,7 +35,7 @@ export class Trades extends Component {
                       { 
                         !trades
                           ? 
-                          <tr><td colSpan={3}>Loading</td></tr> 
+                          <tr><td colSpan={3}> Loading </td></tr> 
                           :
                           trades.map((i) => i.t === 0 || i.t === 'buy'
                           ? 

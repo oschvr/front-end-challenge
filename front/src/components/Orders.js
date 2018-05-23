@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-grid-system';
 
-//API
-import axios from 'axios';
-
 //Utils
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
@@ -11,82 +8,21 @@ import NumberFormat from 'react-number-format';
 export class Orders extends Component {
   constructor(props){
     super(props)
-
-    this.state = {
-      data: {
-        sequence: {},
-        updated_at: {},
-        asks: [],
-        bids: [],
-        loading: true
-      }
-    }
+    this.orders = this.props.orders;
   }
 
-  getInitialState(){
-    return {
-      data: {
-        sequence: {},
-        updated_at: {},
-        asks: [],
-        bids: [],
-        loading: true
-      }
-    }
+  componentDidMount = () => {
+    
   }
-
-  componentWillMount(){
-    //fetch orders to display at first. map the obj values to the socket standard
-    axios.get('https://api.bitso.com/v3/order_book/?book=btc_mxn&aggregate=true')
-      .then((res) => { 
-        this.setState({ 
-          data: { 
-            sequence: res.data.payload.sequence,
-            updated_at: res.data.payload.updated_at,
-            asks: res.data.payload.asks.map((ask) => {
-              const {amount: a, price: r} = ask;
-              return Object.assign({}, {a, r});
-            }),
-            bids: res.data.payload.bids.map((bid) => {
-              const {amount: a, price: r} = bid;
-              return Object.assign({}, {a, r});
-            }),
-            loading: false,
-          }
-        });
-      }, (err) => {
-        console.log('Orders Error: ', err);
-      })
-  }
-
-  componentDidMount(){
-    //new socket instance
-    this.socket = new WebSocket('wss://ws.bitso.com');
-
-    //subscribe to the ordres channel
-    this.socket.onopen = () => {
-      this.socket.send(JSON.stringify({ action: 'subscribe', book: 'btc_mxn', type: 'orders' }));
-    }
-
-    //listen for orders channel new msg
-    this.socket.onmessage = (msg) => {
-      const order = JSON.parse(msg.data);
-      //console.log('Incoming Order: ', order);
-      if(order.type === 'diff_orders' && order.payload){
-        // const orders = {
-        //   sequence: order.payload.sequence,
-        //   updated_at: order.payload.updated_at,
-        //   asks: order.payload.asks,
-        //   bids: order.payload.bids
-        // }
-        //this.setState({orders})
-      }
-    }
+  
+  calculateSum = (orders) =>{
+    return orders.reduce((i)=>{
+      return i.a
+    })
   }
 
   render(){
-    const data = this.state.data;
-    //console.log(data);
+    const orders = this.orders;
     return (
       <div className="card bg-dark text-light rounded-0 border-0">
         <div className="card-body text-center px-1">
@@ -109,27 +45,7 @@ export class Orders extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {
-                      data.loading 
-                      ? 
-                      <tr><td colSpan={4}>Loading</td></tr> 
-                      : 
-                      data.asks.map((i) => {
-                        //console.log(i);
-                        <tr className="small">
-                          <td>{i.a}</td>  
-                          <td>
-                            <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
-                          </td>
-                          <td>
-                            <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
-                          </td> 
-                          <td className="text-success">
-                            <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
-                          </td>
-                        </tr>
-                      })
-                    }
+
                   </tbody>
                 </table>
               </Col>
@@ -149,24 +65,7 @@ export class Orders extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                {
-                  data.loading ? 
-                  <tr><td colSpan={4}>Loading</td></tr> : 
-                  data.bids.slice(0,20).map((i) => {
-                    <tr className="small">
-                      <td>{i.a}}</td>  
-                      <td>
-                        <NumberFormat value={i.a} displayType={'text'} decimalScale={8} fixedDecimalScale={true}/>
-                      </td>
-                      <td>
-                        <NumberFormat value={parseFloat(i.r) * parseFloat(i.a)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
-                      </td> 
-                      <td className="text-success">
-                        <NumberFormat value={i.r} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalScale={2} fixedDecimalScale={true}/>
-                      </td>
-                    </tr>
-                  })
-                }
+                
                 </tbody>
               </table>
               </Col>
@@ -179,13 +78,7 @@ export class Orders extends Component {
 }
 
 Orders.defaultProps = {
-  data: {
-    sequence: {},
-    updated_at: {},
-    asks: [],
-    bids: [],
-    loading: true
-  }
+    orders: null
 }
 
 export default Orders;

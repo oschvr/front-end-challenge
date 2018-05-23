@@ -31,5 +31,6 @@
     "grunt-contrib-watch": "^1.1.0",
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1"
-  }
+  },
+  "proxy": "https://api.bitso.com"
 }
