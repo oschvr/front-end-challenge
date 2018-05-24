@@ -8,7 +8,7 @@ import { Market } from './Market';
 import { Topbar } from './Topbar';
 import { Navbar } from './Navbar';
 
-export class Layout extends Component {
+export class Dashboard extends Component {
   render() {
     return (
       <div>
@@ -45,4 +45,4 @@ export class Layout extends Component {
   }
 }
 
-export default Layout;
+export default Dashboard;

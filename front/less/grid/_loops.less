@@ -1,0 +1,17 @@
+/*
+ * LESS Grid System
+ * 
+ * Author: Oscar Chavez <oscar@vr3.io>
+ * Since: 23/05/18
+ * Last Updated: 23/05/18
+ *
+ */
+
+.generateCols(@counter) when (@counter > 0) {
+  @width: (@counter / @cols ) * 100;
+  .col-@{counter} {
+      flex-basis: ~"@{width}%";
+      max-width: ~"@{width}%";
+  }
+  .generateCols((@counter - 1));
+}

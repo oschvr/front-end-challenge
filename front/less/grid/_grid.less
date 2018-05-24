@@ -1,0 +1,47 @@
+/*
+ * LESS Grid System
+ * 
+ * Author: Oscar Chavez <oscar@vr3.io>
+ * Since: 23/05/18
+ * Last Updated: 23/05/18
+ *
+ */
+
+.contaier {
+  width: @container-width;
+  display: block;
+  margin: auto;
+
+  .row {
+    flex-direction: row;
+
+    &.reverse {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .column {
+    flex-direction: column;
+
+    &.reverse {
+      flex-direction: column-reverse;
+    }
+  }
+  .row,
+  .column {
+    box-sizing: border-box;
+    display: flex;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    margin-right: @gutter;
+    margin-left: @gutter;
+  }
+  [class^="col-"] {
+    box-sizing: border-box;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-right: @gutter / 2;
+    padding-right: @gutter / 2;
+  }
+  .generateCols(@cols)
+}
