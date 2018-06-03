@@ -26,7 +26,7 @@ export class Dashboard extends Component {
             <Col xs={3}>
                 <Trades/>
             </Col>
-            <Col xs={6}>
+            <Col xs={9}>
                 <Row>
                     <Col sm={12}>
                         <Chart/>
@@ -35,9 +35,6 @@ export class Dashboard extends Component {
                         <Orders/>
                     </Col>
                 </Row>
-            </Col>
-            <Col xs={3}>
-                <Market/>
             </Col>
         </Row>
       </div>

@@ -45,6 +45,10 @@ export class Trades extends Component {
       }))
   }
 
+  componentWillUnmount() {
+    this.websocket.close();
+  }
+
   componentDidMount(){
     //new socket instance
     this.socket = new WebSocket('wss://ws.bitso.com');
