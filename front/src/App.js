@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 
-//components
-import Layout from './components/Layout'
+//Components
+import { Dashboard } from './components/Dashboard';
 
 class App extends Component {
-
-  componentWillMount() {
-    
-  }
-
   render() {
     return (
       <div>
-        <Layout/>
+        <Dashboard/>
       </div>
     );
   }
